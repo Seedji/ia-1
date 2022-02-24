@@ -138,7 +138,7 @@ btn1.place(relx=0.2, rely=0.6)
 btn2 = Button(
     window,
     text="Camera(marche pas trop)",
-    command=ia_cam
+    #command=ia_cam
 )
 btn2.place(relx=0.5, rely=0.6)
 

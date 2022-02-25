@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import showinfo
 from tkinter.ttk import *
+from time import *
 
 import cv2
 import numpy as np
@@ -19,6 +20,22 @@ def gen_labels():
             labels[hold[0]] = hold[1]
     return labels
 
+# Couleurs
+Color_name = ['Bleu',
+                   'Jaune',
+                   'Noir',
+                   'Rose',
+                   'Rouge',
+                   'Vert',
+                   'Rien']
+
+Color = [(255, 0, 0),
+              (5, 209, 242),
+              (0, 0, 0),
+              (151, 115, 242),
+              (0, 0, 255),
+              (0, 255, 0),
+              (255, 255, 255)]
 
 # Initialisation de la fenetre
 window = Tk()
@@ -33,7 +50,6 @@ winHeight = window.winfo_reqheight()
 posRight = int(window.winfo_screenwidth() / 2 - winWidth / 2)
 posDown = int(window.winfo_screenheight() / 2 - winHeight / 2)
 window.geometry("+{}+{}".format(posRight, posDown))
-
 
 def ia_pic():
     labels = gen_labels()
@@ -70,7 +86,6 @@ def ia_pic():
     # txt2.place(relx=0.5, rely=0.6, anchor=CENTER)
     showinfo("Result", r_final)
 
-
 def ia_cam():
     labels = gen_labels()
     # Disable scientific notation for clarity
@@ -90,14 +105,9 @@ def ia_cam():
         # Choose a suitable font
         text_font = cv2.FONT_HERSHEY_SIMPLEX
         ret, frame = image.read()
-        # frame = cv2.flip(frame, 1)
-        # In case the image is not read properly
         if not ret:
             continue
-        # Draw a rectangle, in the frame
-        frame = cv2.rectangle(frame, (220, 80), (530, 360), (0, 0, 255), 3)
-        # Draw another rectangle in which the image to labelled is to be shown.
-        frame2 = frame[80:360, 220:530]
+        frame2 = frame
         # resize the image to a 224x224 with the same strategy as in TM2:
         # resizing the image to be at least 224x224 and then cropping from the center
         frame2 = cv2.resize(frame2, (224, 224))
@@ -111,15 +121,29 @@ def ia_cam():
         result = np.argmax(pred[0])
         r_final = labels[str(result)]
 
-        # Print the predicted label into the screen.
-        cv2.putText(frame, "Label : " +
-                    r_final, (280, 400), text_font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        # Récupère la couleur en BGR
+        for n in range(0, 7):
+            if r_final == Color_name[n]:
+                txt_color = Color[n]
+                # print(txt_color)
 
+        # Print the predicted label into the screen.
+        cv2.putText(frame,
+                    r_final,
+                    (280, 400),
+                    text_font,
+                    1,
+                    txt_color,
+                    2,
+                    cv2.LINE_AA
+                    )
         # Exit, when 'q' is pressed on the keyboard
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         # Show the frame
-        cv2.imshow('Frame', frame)
+        cv2.imshow('Frame',
+                   frame)
+        sleep(0.1)
 
     image.release()
     cv2.destroyAllWindows()

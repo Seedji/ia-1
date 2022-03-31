@@ -1,0 +1,6 @@
+0 Bleu
+1 Jaune
+2 Noir
+3 Rose
+4 Rouge
+5 Vert

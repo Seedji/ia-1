@@ -1,6 +1,0 @@
-0 bleu
-1 jaune
-2 noir
-3 rose
-4 rouge
-5 vert
